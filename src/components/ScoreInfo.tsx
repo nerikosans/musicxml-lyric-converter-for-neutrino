@@ -1,15 +1,47 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ScoreTimewise } from 'musicxml-interfaces';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import { extractLyrics, mapLyrics } from '../lib/musicxml';
-import { defaultLyricMap } from '../lib/lyricmap';
-import { Paper } from '@material-ui/core';
+import { defaultLyricMap, LyricMap } from '../lib/lyricmap';
+
+const useStyles = makeStyles({
+  container: {
+    width: '50%',
+    margin: '0 25%',
+    maxHeight: 250,
+  },
+});
 
 interface ScoreInfoProps {
   score: ScoreTimewise | null;
 }
 
+const alphabetRe = new RegExp(/^[a-zA-Z]+$/);
+
 const ScoreInfo: React.FC<ScoreInfoProps> = props => {
+  const styles = useStyles();
+  const { score } = props;
+  const [mapper, setMapper] = React.useState<LyricMap>(defaultLyricMap);
+
+  React.useEffect(() => {
+    if (score === null) return;
+    const alphabetLyrics = extractLyrics(score).filter(l => alphabetRe.test(l));
+
+    setMapper(
+      Object.fromEntries(alphabetLyrics.map(l => [l, defaultLyricMap[l] ?? l]))
+    );
+  }, [score]);
+
   if (props.score === null) {
     return (
       <Paper>
@@ -22,21 +54,51 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
 
   const sc = props.score;
   const lyrics = extractLyrics(sc);
+  const alphabetLyrics = extractLyrics(sc).filter(l => alphabetRe.test(l));
+
   console.log(lyrics);
-  const mapped = mapLyrics(sc, defaultLyricMap);
-  console.log(mapped);
 
   return (
     <Paper>
       <ScoreInfoWrapper>
-        <Row>
-          <Name>タイトル</Name>
-          <Value>{sc.work.workTitle}</Value>
-        </Row>
-        <Row>
-          <Name>パート数</Name>
-          <Value>{sc.partList.length}</Value>
-        </Row>
+        <BasicInfo>
+          <Row>
+            <Name>タイトル</Name>
+            <Value>{sc.work.workTitle}</Value>
+          </Row>
+          <Row>
+            <Name>パート数</Name>
+            <Value>{sc.partList.length}</Value>
+          </Row>
+        </BasicInfo>
+        <TableText>以下の歌詞を変換します。</TableText>
+        <TableContainer className={styles.container}>
+          <Table stickyHeader aria-label='sticky table' size='small'>
+            <TableHead>
+              <TableRow>
+                <TableCell> 変換前</TableCell>
+                <TableCell> 変換後</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {alphabetLyrics.map(lyric => {
+                return (
+                  <TableRow hover role='checkbox' tabIndex={-1} key={lyric}>
+                    <TableCell>{lyric}</TableCell>
+                    <TableCell>
+                      <TextField
+                        id='outlined-basic'
+                        variant='outlined'
+                        value={mapper[lyric] ?? lyric}
+                        size='small'
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </ScoreInfoWrapper>
     </Paper>
   );
@@ -49,13 +111,28 @@ const ScoreInfoWrapper = styled.div`
 
 const ErrorText = styled.div``;
 
+const BasicInfo = styled.div`
+  width: 60%;
+  margin: 1rem auto;
+`;
+
 const Row = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
 `;
-const Name = styled.div`
+const TableText = styled(Typography).attrs({
+  variant: 'body1',
+})`
+  width: 100%;
+  margin: 0.5rem 0;
+`;
+const Name = styled(Typography).attrs({
+  variant: 'body1',
+})`
   width: 20%;
 `;
-const Value = styled.div``;
+const Value = styled(Typography).attrs({
+  variant: 'body1',
+})``;
 
 export default ScoreInfo;
