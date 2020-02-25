@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ScoreTimewise } from 'musicxml-interfaces';
 import { extractLyrics, mapLyrics } from '../lib/musicxml';
 import { defaultLyricMap } from '../lib/lyricmap';
+import { Paper } from '@material-ui/core';
 
 interface ScoreInfoProps {
   score: ScoreTimewise | null;
@@ -11,9 +12,11 @@ interface ScoreInfoProps {
 const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   if (props.score === null) {
     return (
-      <ScoreInfoWrapper>
-        <ErrorText>楽譜が読み込まれていないか、不正な形式です。</ErrorText>
-      </ScoreInfoWrapper>
+      <Paper>
+        <ScoreInfoWrapper>
+          <ErrorText>楽譜が読み込まれていないか、不正な形式です。</ErrorText>
+        </ScoreInfoWrapper>
+      </Paper>
     );
   }
 
@@ -24,21 +27,24 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   console.log(mapped);
 
   return (
-    <ScoreInfoWrapper>
-      <Row>
-        <Name>タイトル</Name>
-        <Value>{sc.work.workTitle}</Value>
-      </Row>
-      <Row>
-        <Name>パート数</Name>
-        <Value>{sc.partList.length}</Value>
-      </Row>
-    </ScoreInfoWrapper>
+    <Paper>
+      <ScoreInfoWrapper>
+        <Row>
+          <Name>タイトル</Name>
+          <Value>{sc.work.workTitle}</Value>
+        </Row>
+        <Row>
+          <Name>パート数</Name>
+          <Value>{sc.partList.length}</Value>
+        </Row>
+      </ScoreInfoWrapper>
+    </Paper>
   );
 };
 
 const ScoreInfoWrapper = styled.div`
   margin-top: 4rem;
+  padding: 2rem 0;
 `;
 
 const ErrorText = styled.div``;
