@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ScoreTimewise } from 'musicxml-interfaces';
-import { extractLyrics } from '../lib/musicxml';
+import { extractLyrics, mapLyrics } from '../lib/musicxml';
+import { defaultLyricMap } from '../lib/lyricmap';
 
 interface ScoreInfoProps {
   score: ScoreTimewise | null;
@@ -19,6 +20,8 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   const sc = props.score;
   const lyrics = extractLyrics(sc);
   console.log(lyrics);
+  const mapped = mapLyrics(sc, defaultLyricMap);
+  console.log(mapped);
 
   return (
     <ScoreInfoWrapper>
