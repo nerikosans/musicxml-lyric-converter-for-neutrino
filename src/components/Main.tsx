@@ -8,12 +8,11 @@ import ScoreInput from './ScoreInput';
 import { LyricMap } from '../lib/lyricmap';
 import { mapTextLyrics, parseScorePromise } from '../lib/musicxml';
 import ScoreResult from './ScoreResult';
-import { sampleScore } from '../lib/sample';
 import ScoreParsing from './ScoreParsing';
 
 interface MainProps {}
 const Main: React.FC<MainProps> = () => {
-  const [inputXml, setInputXml] = React.useState<string>(sampleScore);
+  const [inputXml, setInputXml] = React.useState<string>('');
   const [parsing, setParsing] = React.useState(false);
   const [score, setScore] = React.useState<ScoreTimewise | null>(null);
   const [resultXml, setResultXml] = React.useState<string>('');
