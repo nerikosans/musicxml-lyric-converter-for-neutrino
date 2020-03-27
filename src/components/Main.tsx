@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 
-import { parseScore, ScoreTimewise } from 'musicxml-interfaces';
+import { ScoreTimewise } from 'musicxml-interfaces';
 import ScoreInfo from './ScoreInfo';
 import ScoreInput from './ScoreInput';
 import { LyricMap } from '../lib/lyricmap';
