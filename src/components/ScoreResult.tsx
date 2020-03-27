@@ -4,7 +4,6 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import InputArea from './InputArea';
 import { saveAs } from 'file-saver';
 
 interface ScoreResultProps {
@@ -22,7 +21,6 @@ const ScoreResult: React.FC<ScoreResultProps> = props => {
     <Paper>
       <ScoreResultWrapper>
         <Typography>変換完了！</Typography>
-        <InputArea value={props.resultXml} readOnly />
         <CopyToClipboard text={props.resultXml}>
           <Button variant='contained' color='primary' onClick={onDownload}>
             ダウンロード

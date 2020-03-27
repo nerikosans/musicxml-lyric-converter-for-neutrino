@@ -16,8 +16,9 @@ const Main: React.FC<MainProps> = () => {
   const [score, setScore] = React.useState<ScoreTimewise | null>(null);
   const [resultXml, setResultXml] = React.useState<string>('');
 
-  const parseXml = () => {
-    const result = parseScore(inputXml);
+  const parseXml = (text: string) => {
+    setInputXml(text);
+    const result = parseScore(text);
     setScore(result);
     console.log(result);
   };
@@ -30,11 +31,7 @@ const Main: React.FC<MainProps> = () => {
   return (
     <Container>
       <MainWrapper>
-        <ScoreInput
-          onParse={parseXml}
-          onChange={setInputXml}
-          value={inputXml}
-        />
+        {score === null && <ScoreInput onParse={parseXml} />}
         <ScoreInfo score={score} onMap={onMap} />
         {resultXml && <ScoreResult resultXml={resultXml} />}
       </MainWrapper>
