@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
 
 import { ScoreTimewise } from 'musicxml-interfaces';
 import ScoreInfo from './ScoreInfo';
@@ -45,6 +46,14 @@ const Main: React.FC<MainProps> = () => {
     setScore(null);
   }, []);
 
+  const onReset = React.useCallback(() => {
+    setIsError(false);
+    setScore(null);
+    setInputXml('');
+    setResultXml('');
+    setParsing(false);
+  }, []);
+
   return (
     <Container>
       <Header />
@@ -55,6 +64,9 @@ const Main: React.FC<MainProps> = () => {
           <ScoreInfo score={score} onMap={onMap} onError={onError} />
         )}
         {resultXml && <ScoreResult resultXml={resultXml} />}
+        <ResetButton variant='contained' color='primary' onClick={onReset}>
+          リセット
+        </ResetButton>
       </MainWrapper>
 
       <Footer />
@@ -68,6 +80,10 @@ const MainWrapper = styled.div`
   margin: 5rem auto 0;
 
   text-align: center;
+`;
+
+const ResetButton = styled(Button)`
+  margin-top: 1rem;
 `;
 
 export default Main;
