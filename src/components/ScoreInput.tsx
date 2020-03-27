@@ -12,7 +12,7 @@ const ScoreInput: React.FC<ScoreInputProps> = props => {
   return (
     <Paper>
       <ScoreInputWrapper>
-        <Typography>MusicXMLを貼り付けてください</Typography>
+        <Typography variant='body1'>MusicXMLを読み込んでください</Typography>
         {props.isError && <ErrorText>不正な形式です。</ErrorText>}
         <DropArea onAccept={props.onParse} />
       </ScoreInputWrapper>

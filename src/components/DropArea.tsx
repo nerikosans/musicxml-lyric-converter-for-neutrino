@@ -45,16 +45,12 @@ const DropArea: React.FC<DropAreaProps> = props => {
     // ],
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone(options);
+  const { getRootProps, getInputProps } = useDropzone(options);
 
   return (
     <DropAreaWrapper {...getRootProps()}>
       <input {...getInputProps()} />
-      {isDragActive ? (
-        <p>Drop the files here ...</p>
-      ) : (
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      )}
+      <p>ここにドラッグ＆ドロップするか、クリックしてください</p>
     </DropAreaWrapper>
   );
 };

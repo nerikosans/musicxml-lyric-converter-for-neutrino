@@ -20,7 +20,7 @@ const ScoreResult: React.FC<ScoreResultProps> = props => {
   return (
     <Paper>
       <ScoreResultWrapper>
-        <Typography>変換完了！</Typography>
+        <Text>変換完了！</Text>
         <CopyToClipboard text={props.resultXml}>
           <Button variant='contained' color='primary' onClick={onDownload}>
             ダウンロード
@@ -30,6 +30,12 @@ const ScoreResult: React.FC<ScoreResultProps> = props => {
     </Paper>
   );
 };
+
+const Text = styled(Typography).attrs({
+  variant: 'body1',
+})`
+  margin: 0 0 1rem;
+`;
 
 const ScoreResultWrapper = styled.div`
   margin: 3rem 0;

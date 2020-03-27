@@ -90,6 +90,7 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
           </Row>
         </BasicInfo>
         <TableText>以下の歌詞を変換します。</TableText>
+        <TableText2>入力欄で変換先を編集できます。</TableText2>
         <TableContainer className={styles.container}>
           <Table stickyHeader aria-label='sticky table' size='small'>
             <TableHead>
@@ -150,6 +151,12 @@ const TableText = styled(Typography).attrs({
 })`
   width: 100%;
   margin: 0.5rem 0;
+`;
+const TableText2 = styled(Typography).attrs({
+  variant: 'body2',
+})`
+  width: 100%;
+  margin: 0.3rem 0 1rem;
 `;
 const Name = styled(Typography).attrs({
   variant: 'body1',
