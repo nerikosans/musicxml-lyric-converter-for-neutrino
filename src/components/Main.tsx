@@ -10,6 +10,7 @@ import { mapTextLyrics, parseScorePromise } from '../lib/musicxml';
 import ScoreResult from './ScoreResult';
 import ScoreParsing from './ScoreParsing';
 import Header from './Header';
+import Footer from './Footer';
 
 interface MainProps {}
 const Main: React.FC<MainProps> = () => {
@@ -55,6 +56,8 @@ const Main: React.FC<MainProps> = () => {
         )}
         {resultXml && <ScoreResult resultXml={resultXml} />}
       </MainWrapper>
+
+      <Footer />
     </Container>
   );
 };
