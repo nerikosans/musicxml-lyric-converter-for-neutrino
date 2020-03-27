@@ -76,7 +76,7 @@ const Main: React.FC<MainProps> = () => {
 
 const MainWrapper = styled.div`
   width: 50rem;
-  max-width: 100vw;
+  max-width: 100%;
   margin: 5rem auto 0;
 
   text-align: center;
