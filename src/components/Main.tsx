@@ -9,6 +9,7 @@ import { LyricMap } from '../lib/lyricmap';
 import { mapTextLyrics, parseScorePromise } from '../lib/musicxml';
 import ScoreResult from './ScoreResult';
 import ScoreParsing from './ScoreParsing';
+import Header from './Header';
 
 interface MainProps {}
 const Main: React.FC<MainProps> = () => {
@@ -45,6 +46,7 @@ const Main: React.FC<MainProps> = () => {
 
   return (
     <Container>
+      <Header />
       <MainWrapper>
         {score === null && <ScoreInput onParse={parseXml} isError={isError} />}
         {score === null && parsing && <ScoreParsing />}
