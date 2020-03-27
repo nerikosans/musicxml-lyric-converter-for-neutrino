@@ -38,8 +38,6 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
 
   React.useEffect(() => {
     if (score === null) return;
-    console.log('gg');
-
     const alphabetLyrics = extractLyrics(score).filter(l => alphabetRe.test(l));
     setMapper(
       Object.fromEntries(alphabetLyrics.map(l => [l, mapByDefault(l)]))
