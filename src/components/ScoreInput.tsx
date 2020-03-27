@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputArea from './InputArea';
-import { sampleScore } from '../lib/sample';
 
 interface ScoreInputProps {
   onParse: (text: string) => void;
