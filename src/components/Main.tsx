@@ -6,21 +6,29 @@ import { parseScore, ScoreTimewise } from 'musicxml-interfaces';
 import ScoreInfo from './ScoreInfo';
 import ScoreInput from './ScoreInput';
 import { LyricMap } from '../lib/lyricmap';
-import { mapTextLyrics } from '../lib/musicxml';
+import { mapTextLyrics, parseScorePromise } from '../lib/musicxml';
 import ScoreResult from './ScoreResult';
 import { sampleScore } from '../lib/sample';
+import ScoreParsing from './ScoreParsing';
 
 interface MainProps {}
 const Main: React.FC<MainProps> = () => {
   const [inputXml, setInputXml] = React.useState<string>(sampleScore);
+  const [parsing, setParsing] = React.useState(false);
   const [score, setScore] = React.useState<ScoreTimewise | null>(null);
   const [resultXml, setResultXml] = React.useState<string>('');
 
   const parseXml = (text: string) => {
     setInputXml(text);
-    const result = parseScore(text);
-    setScore(result);
-    console.log(result);
+    setParsing(true);
+    parseScorePromise(text)
+      .then(result => {
+        setScore(result);
+        console.log(result);
+      })
+      .finally(() => {
+        setParsing(false);
+      });
   };
 
   const onMap = (mapper: LyricMap) => {
@@ -32,6 +40,7 @@ const Main: React.FC<MainProps> = () => {
     <Container>
       <MainWrapper>
         {score === null && <ScoreInput onParse={parseXml} />}
+        {score === null && parsing && <ScoreParsing />}
         <ScoreInfo score={score} onMap={onMap} />
         {resultXml && <ScoreResult resultXml={resultXml} />}
       </MainWrapper>

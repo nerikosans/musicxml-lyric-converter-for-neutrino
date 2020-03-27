@@ -1,5 +1,14 @@
-import { ScoreTimewise } from 'musicxml-interfaces';
+import { ScoreTimewise, parseScore } from 'musicxml-interfaces';
 import { LyricMap } from './lyricmap';
+
+export const parseScorePromise = (
+  text: string
+): Promise<ScoreTimewise | null> => {
+  return new Promise<ScoreTimewise | null>(resolve => {
+    const result = parseScore(text);
+    resolve(result);
+  });
+};
 
 export const extractLyrics = (score: ScoreTimewise) => {
   const { measures } = score;
