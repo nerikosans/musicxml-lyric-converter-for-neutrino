@@ -4,9 +4,13 @@ import { LyricMap } from './lyricmap';
 export const parseScorePromise = (
   text: string
 ): Promise<ScoreTimewise | null> => {
-  return new Promise<ScoreTimewise | null>(resolve => {
-    const result = parseScore(text);
-    resolve(result);
+  return new Promise<ScoreTimewise | null>((resolve, reject) => {
+    try {
+      const result = parseScore(text);
+      resolve(result);
+    } catch {
+      reject();
+    }
   });
 };
 

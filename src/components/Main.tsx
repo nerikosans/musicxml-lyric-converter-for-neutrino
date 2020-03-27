@@ -14,6 +14,7 @@ interface MainProps {}
 const Main: React.FC<MainProps> = () => {
   const [inputXml, setInputXml] = React.useState<string>('');
   const [parsing, setParsing] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
   const [score, setScore] = React.useState<ScoreTimewise | null>(null);
   const [resultXml, setResultXml] = React.useState<string>('');
 
@@ -23,7 +24,9 @@ const Main: React.FC<MainProps> = () => {
     parseScorePromise(text)
       .then(result => {
         setScore(result);
-        console.log(result);
+      })
+      .catch(() => {
+        setIsError(true);
       })
       .finally(() => {
         setParsing(false);
@@ -35,12 +38,19 @@ const Main: React.FC<MainProps> = () => {
     setResultXml(mapTextLyrics(inputXml, mapper));
   };
 
+  const onError = React.useCallback(() => {
+    setIsError(true);
+    setScore(null);
+  }, []);
+
   return (
     <Container>
       <MainWrapper>
-        {score === null && <ScoreInput onParse={parseXml} />}
+        {score === null && <ScoreInput onParse={parseXml} isError={isError} />}
         {score === null && parsing && <ScoreParsing />}
-        <ScoreInfo score={score} onMap={onMap} />
+        {score !== null && (
+          <ScoreInfo score={score} onMap={onMap} onError={onError} />
+        )}
         {resultXml && <ScoreResult resultXml={resultXml} />}
       </MainWrapper>
     </Container>

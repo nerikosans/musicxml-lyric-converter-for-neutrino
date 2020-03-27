@@ -27,22 +27,32 @@ const useStyles = makeStyles({
 interface ScoreInfoProps {
   score: ScoreTimewise | null;
   onMap: (mapper: LyricMap) => void;
+  onError?: () => void;
 }
 
 const alphabetRe = new RegExp(/^[a-zA-Z]+$/);
 
 const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   const styles = useStyles();
-  const { score } = props;
+  const { score, onError } = props;
   const [mapper, setMapper] = React.useState<LyricMap>(defaultLyricMap);
+  const [lyrics, setLyrics] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     if (score === null) return;
-    const alphabetLyrics = extractLyrics(score).filter(l => alphabetRe.test(l));
-    setMapper(
-      Object.fromEntries(alphabetLyrics.map(l => [l, mapByDefault(l)]))
-    );
-  }, [score]);
+    try {
+      const alphabetLyrics = extractLyrics(score)
+        .filter(l => alphabetRe.test(l))
+        .sort((a, b) => (mapByDefault(a) < mapByDefault(b) ? -1 : 1));
+
+      setLyrics(alphabetLyrics);
+      setMapper(
+        Object.fromEntries(alphabetLyrics.map(l => [l, mapByDefault(l)]))
+      );
+    } catch {
+      onError?.();
+    }
+  }, [onError, score]);
 
   const onMapperChange = React.useCallback((key: string, value: string) => {
     setMapper(_mapper => {
@@ -66,21 +76,17 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   const sc = props.score;
   const mapByDefault = (v: string) => defaultLyricMap[v] ?? v;
 
-  const alphabetLyrics = extractLyrics(sc)
-    .filter(l => alphabetRe.test(l))
-    .sort((a, b) => (mapByDefault(a) < mapByDefault(b) ? -1 : 1));
-
   return (
     <Paper>
       <ScoreInfoWrapper>
         <BasicInfo>
           <Row>
             <Name>タイトル</Name>
-            <Value>{sc.work.workTitle}</Value>
+            <Value>{sc?.work?.workTitle ?? 'タイトルなし'}</Value>
           </Row>
           <Row>
             <Name>パート数</Name>
-            <Value>{sc.partList.length}</Value>
+            <Value>{sc?.partList?.length ?? '不明'}</Value>
           </Row>
         </BasicInfo>
         <TableText>以下の歌詞を変換します。</TableText>
@@ -93,7 +99,7 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {alphabetLyrics.map(lyric => {
+              {lyrics.map(lyric => {
                 return (
                   <TableRow hover role='checkbox' tabIndex={-1} key={lyric}>
                     <TableCell>{lyric}</TableCell>
