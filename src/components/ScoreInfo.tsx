@@ -12,12 +12,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { extractLyrics, mapLyrics } from '../lib/musicxml';
+import { extractLyrics } from '../lib/musicxml';
 import { defaultLyricMap, LyricMap } from '../lib/lyricmap';
 
 const useStyles = makeStyles({
   container: {
     width: '50%',
+    height: '40rem',
     margin: '0 25% 1rem',
     maxHeight: 250,
   },
@@ -37,12 +38,22 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
 
   React.useEffect(() => {
     if (score === null) return;
-    const alphabetLyrics = extractLyrics(score).filter(l => alphabetRe.test(l));
+    console.log('gg');
 
+    const alphabetLyrics = extractLyrics(score).filter(l => alphabetRe.test(l));
     setMapper(
-      Object.fromEntries(alphabetLyrics.map(l => [l, defaultLyricMap[l] ?? l]))
+      Object.fromEntries(alphabetLyrics.map(l => [l, mapByDefault(l)]))
     );
   }, [score]);
+
+  const onMapperChange = React.useCallback((key: string, value: string) => {
+    setMapper(_mapper => {
+      return {
+        ..._mapper,
+        [key]: value,
+      };
+    });
+  }, []);
 
   if (props.score === null) {
     return (
@@ -55,10 +66,11 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
   }
 
   const sc = props.score;
-  const lyrics = extractLyrics(sc);
-  const alphabetLyrics = extractLyrics(sc).filter(l => alphabetRe.test(l));
+  const mapByDefault = (v: string) => defaultLyricMap[v] ?? v;
 
-  console.log(lyrics);
+  const alphabetLyrics = extractLyrics(sc)
+    .filter(l => alphabetRe.test(l))
+    .sort((a, b) => (mapByDefault(a) < mapByDefault(b) ? -1 : 1));
 
   return (
     <Paper>
@@ -91,6 +103,7 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
                       <TextField
                         variant='outlined'
                         value={mapper[lyric] ?? lyric}
+                        onChange={e => onMapperChange(lyric, e.target.value)}
                         size='small'
                       />
                     </TableCell>
