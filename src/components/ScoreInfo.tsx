@@ -11,19 +11,21 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { extractLyrics, mapLyrics } from '../lib/musicxml';
 import { defaultLyricMap, LyricMap } from '../lib/lyricmap';
 
 const useStyles = makeStyles({
   container: {
     width: '50%',
-    margin: '0 25%',
+    margin: '0 25% 1rem',
     maxHeight: 250,
   },
 });
 
 interface ScoreInfoProps {
   score: ScoreTimewise | null;
+  onMap: (mapper: LyricMap) => void;
 }
 
 const alphabetRe = new RegExp(/^[a-zA-Z]+$/);
@@ -87,7 +89,6 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
                     <TableCell>{lyric}</TableCell>
                     <TableCell>
                       <TextField
-                        id='outlined-basic'
                         variant='outlined'
                         value={mapper[lyric] ?? lyric}
                         size='small'
@@ -99,6 +100,13 @@ const ScoreInfo: React.FC<ScoreInfoProps> = props => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => props.onMap(mapper)}
+        >
+          変換!
+        </Button>
       </ScoreInfoWrapper>
     </Paper>
   );
