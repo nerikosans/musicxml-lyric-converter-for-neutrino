@@ -8,22 +8,22 @@ import { sampleScore } from '../lib/sample';
 
 interface ScoreInputProps {
   onParse: (text: string) => void;
+  onChange: (v: string) => void;
+  value: string;
 }
 const ScoreInput: React.FC<ScoreInputProps> = props => {
-  const [inputXml, setInputXml] = React.useState<string>(sampleScore);
-
   return (
     <Paper>
       <ScoreInputWrapper>
         <Typography>MusicXMLを貼り付けてください</Typography>
         <InputArea
-          onChange={e => setInputXml(e.target.value)}
-          value={inputXml}
+          onChange={e => props.onChange(e.target.value)}
+          value={props.value}
         />
         <Button
           variant='contained'
           color='primary'
-          onClick={() => props.onParse(inputXml)}
+          onClick={() => props.onParse(props.value)}
         >
           Parse!
         </Button>

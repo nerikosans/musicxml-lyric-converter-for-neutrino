@@ -5,19 +5,27 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputArea from './InputArea';
+import { saveAs } from 'file-saver';
 
 interface ScoreResultProps {
   resultXml: string;
 }
 const ScoreResult: React.FC<ScoreResultProps> = props => {
+  const onDownload = React.useCallback(() => {
+    const blob = new Blob([props.resultXml], {
+      type: 'application/vnd.recordare.musicxml+xml',
+    });
+    saveAs(blob, 'result.musicxml');
+  }, [props.resultXml]);
+
   return (
     <Paper>
       <ScoreResultWrapper>
         <Typography>変換完了！</Typography>
         <InputArea value={props.resultXml} readOnly />
         <CopyToClipboard text={props.resultXml}>
-          <Button variant='contained' color='primary'>
-            クリップボードにコピー
+          <Button variant='contained' color='primary' onClick={onDownload}>
+            ダウンロード
           </Button>
         </CopyToClipboard>
       </ScoreResultWrapper>

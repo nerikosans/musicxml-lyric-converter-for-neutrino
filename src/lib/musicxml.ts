@@ -121,3 +121,14 @@ export const mapLyrics = (score: ScoreTimewise, mapper: LyricMap) => {
 
   return result;
 };
+
+export const mapTextLyrics = (text: string, mapper: LyricMap) => {
+  let result = text;
+
+  for (const [k, v] of Object.entries(mapper)) {
+    const re = new RegExp(`<text>${k}</text>`, 'g');
+    result = result.replace(re, `<text>${v}</text>`);
+  }
+
+  return result;
+};
