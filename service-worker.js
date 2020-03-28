@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/musicxml-lyric-converter-for-neutrino/precache-manifest.944dfd7d66604afd55174e5f5f2582e0.js"
+  "/musicxml-lyric-converter-for-neutrino/precache-manifest.533bb814f51962754462fa7a4f529853.js"
 );
 
 self.addEventListener('message', (event) => {
